@@ -1,10 +1,17 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { ExpenseService } from '../../services/expense.service';
-import { Expense } from '../../models/expense.model';
 
 @Component({
   selector: 'app-add-expense',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './add-expense.component.html',
   styleUrls: ['./add-expense.component.css'],
 })
@@ -22,12 +29,12 @@ export class AddExpenseComponent {
 
   onSubmit() {
     if (this.expenseForm.valid) {
-      const newExpense: Expense = {
+      const newExpense = {
         id: Date.now(),
         ...this.expenseForm.value,
         date: new Date(this.expenseForm.value.date),
       };
-      this.expenseService.addExpense(newExpense);
+      this.expenseService.addExpenses(newExpense);
       this.expenseForm.reset();
     }
   }

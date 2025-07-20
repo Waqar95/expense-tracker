@@ -1,11 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ExpenseService } from '../../services/expense.service';
+import { Expense } from '../../models/expense.model';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-expense-list',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, AsyncPipe],
   templateUrl: './expense-list.component.html',
-  styleUrl: './expense-list.component.css'
+  styleUrls: ['./expense-list.component.css'],
 })
-export class ExpenseListComponent {
+export class ExpenseListComponent implements OnInit {
+  expenses$ = this.expenseService.expenses$;
 
+  constructor(private expenseService: ExpenseService) {}
+
+  ngOnInit(): void {}
 }
