@@ -7,17 +7,36 @@ import { Expense } from '../models/expense.model';
 })
 export class ExpenseService {
   private expenses: Expense[] = [];
-  private expensesSubject = new BehaviorSubject<Expense[]>(this.expenses);
+  private expensesSubject = new BehaviorSubject<Expense[]>([]);
 
   expenses$ = this.expensesSubject.asObservable();
 
-  constructor() {}
+  constructor() {
+    this.loadExpenses();
+  }
 
   getExpenses(): Expense[] {
-    return this.expenses;
+    return [...this.expenses]; // return a copy
   }
-  addExpenses(expense: Expense) {
+
+  addExpense(expense: Expense): void {
     this.expenses.push(expense);
-    this.expensesSubject.next(this.expenses);
+    this.saveExpenses();
+    this.expensesSubject.next([...this.expenses]);
+  }
+
+  private saveExpenses(): void {
+    localStorage.setItem('expenses', JSON.stringify(this.expenses));
+  }
+
+  private loadExpenses(): void {
+    const data = localStorage.getItem('expenses');
+    if (data) {
+      this.expenses = JSON.parse(data).map((e: any) => ({
+        ...e,
+        date: new Date(e.date),
+      }));
+      this.expensesSubject.next([...this.expenses]);
+    }
   }
 }
