@@ -1,1 +1,9 @@
-<p>expense-summary works!</p>
+<h2>Expense Summary</h2>
+
+<p><strong>Total Spent:</strong> ₹{{ total }}</p>
+
+<ul>
+  <li *ngFor="let category of categoryTotals | keyvalue">
+    <strong>{{ category.key }}:</strong> ₹{{ category.value }}
+  </li>
+</ul>
