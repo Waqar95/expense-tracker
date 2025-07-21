@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, AsyncPipe } from '@angular/common';
 import { ExpenseService } from '../../services/expense.service';
 import { Expense } from '../../models/expense.model';
-import { AsyncPipe } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-expense-list',
@@ -12,9 +12,11 @@ import { AsyncPipe } from '@angular/common';
   styleUrls: ['./expense-list.component.css'],
 })
 export class ExpenseListComponent implements OnInit {
-  expenses$ = this.expenseService.expenses$;
+  expenses$!: Observable<Expense[]>;
 
   constructor(private expenseService: ExpenseService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.expenses$ = this.expenseService.expenses$;
+  }
 }
