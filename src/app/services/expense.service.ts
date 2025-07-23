@@ -11,6 +11,13 @@ export class ExpenseService {
 
   expenses$ = this.expensesSubject.asObservable();
 
+  private editingExpenseSubject = new BehaviorSubject<Expense | null>(null);
+  editingExpense$ = this.editingExpenseSubject.asObservable();
+
+  setEditingExpense(expense: Expense | null) {
+    this.editingExpenseSubject.next(expense);
+  }
+
   constructor() {
     this.loadExpenses();
   }
@@ -43,5 +50,13 @@ export class ExpenseService {
     this.expenses = this.expenses.filter((e) => e.id !== id);
     this.saveExpenses();
     this.expensesSubject.next([...this.expenses]);
+  }
+  updateExpense(updatedExpense: Expense): void {
+    const index = this.expenses.findIndex((e) => e.id === updatedExpense.id);
+    if (index !== -1) {
+      this.expenses[index] = updatedExpense;
+      this.saveExpenses();
+      this.expensesSubject.next([...this.expenses]);
+    }
   }
 }

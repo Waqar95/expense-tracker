@@ -22,4 +22,7 @@ export class ExpenseListComponent implements OnInit {
   deleteExpense(id: number): void {
     this.expenseService.deleteExpense(id);
   }
+  editExpense(expense: Expense): void {
+    this.expenseService.setEditingExpense(expense);
+  }
 }
