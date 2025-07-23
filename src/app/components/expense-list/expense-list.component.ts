@@ -19,4 +19,7 @@ export class ExpenseListComponent implements OnInit {
   ngOnInit(): void {
     this.expenses$ = this.expenseService.expenses$;
   }
+  deleteExpense(id: number): void {
+    this.expenseService.deleteExpense(id);
+  }
 }

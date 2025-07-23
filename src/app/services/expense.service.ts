@@ -39,4 +39,9 @@ export class ExpenseService {
       this.expensesSubject.next([...this.expenses]);
     }
   }
+  deleteExpense(id: number): void {
+    this.expenses = this.expenses.filter((e) => e.id !== id);
+    this.saveExpenses();
+    this.expensesSubject.next([...this.expenses]);
+  }
 }

@@ -34,7 +34,7 @@ export class AddExpenseComponent {
         ...this.expenseForm.value,
         date: new Date(this.expenseForm.value.date),
       };
-      this.expenseService.addExpenses(newExpense);
+      this.expenseService.addExpense(newExpense);
       this.expenseForm.reset();
     }
   }

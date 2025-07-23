@@ -3,5 +3,6 @@
   <li *ngFor="let expense of expenses$ | async">
     <strong>{{ expense.title }}</strong> - ₹{{ expense.amount }} -
     {{ expense.category }} on {{ expense.date | date : "mediumDate" }}
+    <button (click)="deleteExpense(expense.id)">Delete</button>
   </li>
 </ul>
