@@ -1,7 +1,20 @@
 <h2>Expense List</h2>
+
+<div style="margin-bottom: 1rem">
+  <label for="categoryFilter">Filter by Category:</label>
+  <select
+    id="categoryFilter"
+    [(ngModel)]="selectedCategory"
+    (change)="applyFilter()"
+  >
+    <option value="">All</option>
+    <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+  </select>
+</div>
+
 <ul style="list-style: none; padding: 0">
   <li
-    *ngFor="let expense of expenses$ | async"
+    *ngFor="let expense of filteredExpenses"
     style="
       margin-bottom: 1rem;
       border-bottom: 1px solid #ccc;
