@@ -1,0 +1,28 @@
+ul {
+  padding: 0;
+}
+
+li {
+  list-style: none;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+button {
+  margin-right: 0.5rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+button:first-of-type {
+  background-color: #ffc107;
+  color: #000;
+}
+
+button:last-of-type {
+  background-color: #f44336;
+  color: #fff;
+}
