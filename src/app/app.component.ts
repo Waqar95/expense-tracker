@@ -1,24 +1,21 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { AddExpenseComponent } from './components/add-expense/add-expense.component';
-import { ExpenseListComponent } from './components/expense-list/expense-list.component';
-import { ExpenseSummaryComponent } from './components/expense-summary/expense-summary.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    RouterOutlet,
-    AddExpenseComponent,
-    ExpenseListComponent,
-    ExpenseSummaryComponent,
-  ],
+  imports: [RouterModule],
   template: `
-    <div style="max-width: 600px; margin: auto; padding: 1rem;">
+    <div style="max-width: 700px; margin: auto; padding: 1rem;">
       <h1>Expense Tracker</h1>
-      <app-add-expense></app-add-expense>
-      <app-expense-list></app-expense-list>
-      <app-expense-summary></app-expense-summary>
+
+      <nav class="nav-tabs">
+        <a routerLink="/add" routerLinkActive="active">Add Expense</a>
+        <a routerLink="/list" routerLinkActive="active">Expense List</a>
+        <a routerLink="/summary" routerLinkActive="active">Summary</a>
+      </nav>
+
+      <router-outlet></router-outlet>
     </div>
   `,
   styleUrls: ['./app.component.css'],
