@@ -11,6 +11,20 @@ export class ExpenseService {
 
   expenses$ = this.expensesSubject.asObservable();
 
+  private currencySubject = new BehaviorSubject<string>(
+    this.getSavedCurrency()
+  );
+  currency$ = this.currencySubject.asObservable();
+
+  setCurrency(currency: string): void {
+    this.currencySubject.next(currency);
+    localStorage.setItem('currency', currency);
+  }
+
+  private getSavedCurrency(): string {
+    return localStorage.getItem('currency') || '₹';
+  }
+
   private editingExpenseSubject = new BehaviorSubject<Expense | null>(null);
   editingExpense$ = this.editingExpenseSubject.asObservable();
 
