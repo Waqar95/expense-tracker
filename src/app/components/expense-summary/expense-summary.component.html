@@ -1,9 +1,9 @@
 <h2>Expense Summary</h2>
 
-<p><strong>Total Spent:</strong> ₹{{ total }}</p>
+<p><strong>Total Spent:</strong> {{ currency }}{{ total }}</p>
 
 <ul>
   <li *ngFor="let category of categoryTotals | keyvalue">
-    <strong>{{ category.key }}:</strong> ₹{{ category.value }}
+    <strong>{{ category.key }}:</strong> {{ currency }}{{ category.value }}
   </li>
 </ul>

@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-expense-list',
   standalone: true,
-  imports: [CommonModule, AsyncPipe, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './expense-list.component.html',
   styleUrls: ['./expense-list.component.css'],
 })

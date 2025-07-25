@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ExpenseService } from './services/expense.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterModule],
+  styleUrls: ['./app.component.css'],
   template: `
     <div style="max-width: 700px; margin: auto; padding: 1rem;">
       <h1>Expense Tracker</h1>
@@ -20,8 +22,8 @@ import { RouterModule } from '@angular/router';
 
         <div>
           <label for="currency">Currency:</label>
-          <select id="currency" (change)="setCurrency($event.target.value)">
-            <option value="₹">₹ (INR)</option>
+          <select id="currency" (change)="setCurrency($event)">
+            <option value="Rs">Rs (PKR))</option>
             <option value="$">$ (USD)</option>
             <option value="€">€ (EUR)</option>
             <option value="£">£ (GBP)</option>
@@ -29,8 +31,16 @@ import { RouterModule } from '@angular/router';
           </select>
         </div>
       </div>
+
+      <router-outlet></router-outlet>
     </div>
   `,
-  styleUrls: ['./app.component.css'],
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor(private expenseService: ExpenseService) {}
+
+  setCurrency(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    this.expenseService.setCurrency(select.value);
+  }
+}
