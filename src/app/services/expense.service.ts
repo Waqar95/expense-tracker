@@ -8,13 +8,23 @@ import { Expense } from '../models/expense.model';
 export class ExpenseService {
   private expenses: Expense[] = [];
   private expensesSubject = new BehaviorSubject<Expense[]>([]);
-
   expenses$ = this.expensesSubject.asObservable();
 
   private currencySubject = new BehaviorSubject<string>(
     this.getSavedCurrency()
   );
   currency$ = this.currencySubject.asObservable();
+
+  private editingExpenseSubject = new BehaviorSubject<Expense | null>(null);
+  editingExpense$ = this.editingExpenseSubject.asObservable();
+
+  constructor() {
+    this.loadExpenses();
+  }
+
+  // ------------------------
+  // Currency Management
+  // ------------------------
 
   setCurrency(currency: string): void {
     this.currencySubject.next(currency);
@@ -25,19 +35,20 @@ export class ExpenseService {
     return localStorage.getItem('currency') || '₹';
   }
 
-  private editingExpenseSubject = new BehaviorSubject<Expense | null>(null);
-  editingExpense$ = this.editingExpenseSubject.asObservable();
+  // ------------------------
+  // Editing Support
+  // ------------------------
 
-  setEditingExpense(expense: Expense | null) {
+  setEditingExpense(expense: Expense | null): void {
     this.editingExpenseSubject.next(expense);
   }
 
-  constructor() {
-    this.loadExpenses();
-  }
+  // ------------------------
+  // Expense CRUD
+  // ------------------------
 
   getExpenses(): Expense[] {
-    return [...this.expenses]; // return a copy
+    return [...this.expenses];
   }
 
   addExpense(expense: Expense): void {
@@ -45,6 +56,25 @@ export class ExpenseService {
     this.saveExpenses();
     this.expensesSubject.next([...this.expenses]);
   }
+
+  updateExpense(updatedExpense: Expense): void {
+    const index = this.expenses.findIndex((e) => e.id === updatedExpense.id);
+    if (index !== -1) {
+      this.expenses[index] = updatedExpense;
+      this.saveExpenses();
+      this.expensesSubject.next([...this.expenses]);
+    }
+  }
+
+  deleteExpense(id: number): void {
+    this.expenses = this.expenses.filter((e) => e.id !== id);
+    this.saveExpenses();
+    this.expensesSubject.next([...this.expenses]);
+  }
+
+  // ------------------------
+  // Local Storage Persistence
+  // ------------------------
 
   private saveExpenses(): void {
     localStorage.setItem('expenses', JSON.stringify(this.expenses));
@@ -57,19 +87,6 @@ export class ExpenseService {
         ...e,
         date: new Date(e.date),
       }));
-      this.expensesSubject.next([...this.expenses]);
-    }
-  }
-  deleteExpense(id: number): void {
-    this.expenses = this.expenses.filter((e) => e.id !== id);
-    this.saveExpenses();
-    this.expensesSubject.next([...this.expenses]);
-  }
-  updateExpense(updatedExpense: Expense): void {
-    const index = this.expenses.findIndex((e) => e.id === updatedExpense.id);
-    if (index !== -1) {
-      this.expenses[index] = updatedExpense;
-      this.saveExpenses();
       this.expensesSubject.next([...this.expenses]);
     }
   }
