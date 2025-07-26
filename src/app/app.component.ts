@@ -1,38 +1,41 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterOutlet, RouterModule } from '@angular/router';
+import { ToastComponent } from './components/toast/toast.component';
 import { ExpenseService } from './services/expense.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterOutlet, RouterModule, ToastComponent],
   styleUrls: ['./app.component.css'],
   template: `
-    <div style="max-width: 700px; margin: auto; padding: 1rem;">
-      <h1>Expense Tracker</h1>
+    <div class="container">
+      <header>
+        <h1>Expense Tracker</h1>
 
-      <div
-        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"
-      >
         <nav class="nav-tabs">
           <a routerLink="/add" routerLinkActive="active">Add Expense</a>
           <a routerLink="/list" routerLinkActive="active">Expense List</a>
           <a routerLink="/summary" routerLinkActive="active">Summary</a>
         </nav>
 
-        <div>
+        <div class="currency-selector">
           <label for="currency">Currency:</label>
           <select id="currency" (change)="setCurrency($event)">
-            <option value="Rs">Rs (PKR))</option>
+            <option value="₹">Rs (PKR)</option>
             <option value="$">$ (USD)</option>
             <option value="€">€ (EUR)</option>
             <option value="£">£ (GBP)</option>
             <option value="¥">¥ (JPY)</option>
           </select>
         </div>
-      </div>
+      </header>
 
-      <router-outlet></router-outlet>
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+
+      <app-toast></app-toast>
     </div>
   `,
 })

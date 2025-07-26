@@ -1,76 +1,57 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExpenseService } from '../../services/expense.service';
+import { FormsModule } from '@angular/forms';
 import { Expense } from '../../models/expense.model';
-import { Subscription } from 'rxjs';
+import { ExpenseService } from '../../services/expense.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-add-expense',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './add-expense.component.html',
   styleUrls: ['./add-expense.component.css'],
 })
-export class AddExpenseComponent implements OnInit, OnDestroy {
-  expenseForm: FormGroup;
-  editingExpense: Expense | null = null;
-  private subscription!: Subscription;
+export class AddExpenseComponent implements OnInit {
+  expense: Expense = this.getEmptyExpense();
+  isEditing = false;
 
-  constructor(private fb: FormBuilder, private expenseService: ExpenseService) {
-    this.expenseForm = this.fb.group({
-      title: ['', Validators.required],
-      amount: [0, [Validators.required, Validators.min(0.01)]],
-      category: ['', Validators.required],
-      date: ['', Validators.required],
+  constructor(
+    private expenseService: ExpenseService,
+    private toastService: ToastService
+  ) {}
+
+  ngOnInit(): void {
+    this.expenseService.editingExpense$.subscribe((expense) => {
+      if (expense) {
+        this.expense = { ...expense }; // make a copy
+        this.isEditing = true;
+      }
     });
   }
 
-  ngOnInit(): void {
-    this.subscription = this.expenseService.editingExpense$.subscribe(
-      (expense) => {
-        this.editingExpense = expense;
-        if (expense) {
-          this.expenseForm.patchValue({
-            title: expense.title,
-            amount: expense.amount,
-            category: expense.category,
-            date: expense.date.toISOString().substring(0, 10),
-          });
-        }
-      }
-    );
-  }
-
-  onSubmit() {
-    if (this.expenseForm.valid) {
-      const formValue = this.expenseForm.value;
-      const expense: Expense = {
-        id: this.editingExpense ? this.editingExpense.id : Date.now(),
-        title: formValue.title,
-        amount: formValue.amount,
-        category: formValue.category,
-        date: new Date(formValue.date),
-      };
-
-      if (this.editingExpense) {
-        this.expenseService.updateExpense(expense);
-      } else {
-        this.expenseService.addExpense(expense);
-      }
-
-      this.expenseForm.reset();
-      this.editingExpense = null;
-      this.expenseService.setEditingExpense(null);
+  onSubmit(): void {
+    if (this.isEditing) {
+      this.expenseService.updateExpense(this.expense);
+      this.toastService.show('Expense updated!');
+    } else {
+      const newExpense = { ...this.expense, id: Date.now() };
+      this.expenseService.addExpense(newExpense);
+      this.toastService.show('Expense added!');
     }
+
+    this.expense = this.getEmptyExpense();
+    this.isEditing = false;
+    this.expenseService.setEditingExpense(null);
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+  private getEmptyExpense(): Expense {
+    return {
+      id: 0,
+      title: '',
+      amount: 0,
+      category: '',
+      date: new Date(),
+    };
   }
 }
