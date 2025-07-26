@@ -13,18 +13,14 @@
 </div>
 
 <ul style="list-style: none; padding: 0">
-  <li
-    *ngFor="let expense of filteredExpenses"
-    style="
-      margin-bottom: 1rem;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 0.5rem;
-    "
-  >
-    <strong>{{ expense.title }}</strong> - ₹{{ expense.amount }} -
-    {{ expense.category }} on {{ expense.date | date : "mediumDate" }}
-    <br />
-    <button (click)="editExpense(expense)">Edit</button>
-    <button (click)="deleteExpense(expense.id)">Delete</button>
+  <li *ngFor="let expense of filteredExpenses">
+    <strong>{{ expense.title }}</strong> - {{ currency }}{{ expense.amount }} -
+    {{ expense.category }} -
+    {{ expense.date | date : "mediumDate" }}
+
+    <div class="actions">
+      <button (click)="editExpense(expense)">Edit</button>
+      <button (click)="deleteExpense(expense.id)">Delete</button>
+    </div>
   </li>
 </ul>
