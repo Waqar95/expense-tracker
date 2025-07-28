@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ExpenseService } from '../../services/expense.service';
 import { Expense } from '../../models/expense.model';
 import { Subscription } from 'rxjs';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-expense-list',
@@ -21,7 +22,10 @@ export class ExpenseListComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
 
-  constructor(private expenseService: ExpenseService) {}
+  constructor(
+    private expenseService: ExpenseService,
+    private toastService: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.subscriptions.add(
@@ -56,5 +60,6 @@ export class ExpenseListComponent implements OnInit, OnDestroy {
 
   editExpense(expense: Expense): void {
     this.expenseService.setEditingExpense(expense);
+    this.toastService.show('Expense loaded for editing');
   }
 }
