@@ -21,7 +21,7 @@
       name="amount"
       [(ngModel)]="expense.amount"
       required
-      placeholder="e.g. 1000"
+      placeholder="e.g. 500"
     />
   </div>
 
@@ -48,7 +48,9 @@
     />
   </div>
 
-  <button type="submit">
-    {{ isEditing ? "Update Expense" : "Add Expense" }}
-  </button>
+  <div class="form-group">
+    <button type="submit">
+      {{ isEditing ? "Update Expense" : "Add Expense" }}
+    </button>
+  </div>
 </form>

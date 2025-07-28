@@ -1,65 +1,68 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AsyncPipe } from '@angular/common';
 import { ExpenseService } from '../../services/expense.service';
-import { Expense } from '../../models/expense.model';
-import { Subscription } from 'rxjs';
 import { ToastService } from '../../services/toast.service';
+import { Expense } from '../../models/expense.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-expense-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AsyncPipe],
   templateUrl: './expense-list.component.html',
   styleUrls: ['./expense-list.component.css'],
 })
-export class ExpenseListComponent implements OnInit, OnDestroy {
-  allExpenses: Expense[] = [];
+export class ExpenseListComponent implements OnInit {
+  expenses: Expense[] = [];
   filteredExpenses: Expense[] = [];
   selectedCategory: string = '';
   categories: string[] = [];
   currency: string = '₹';
 
-  private subscriptions = new Subscription();
-
   constructor(
     private expenseService: ExpenseService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.subscriptions.add(
-      this.expenseService.expenses$.subscribe((expenses) => {
-        this.allExpenses = expenses;
-        this.categories = [...new Set(expenses.map((e) => e.category))];
-        this.applyFilter();
-      })
-    );
+    this.expenseService.expenses$.subscribe((expenses) => {
+      this.expenses = expenses;
+      this.extractCategories();
+      this.applyFilter();
+    });
 
-    this.subscriptions.add(
-      this.expenseService.currency$.subscribe((currency) => {
-        console.log('[LIST] Currency:', currency); // ✅ Add this to test
-        this.currency = currency;
-      })
-    );
+    this.expenseService.currency$.subscribe((c) => {
+      this.currency = c;
+    });
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+  extractCategories(): void {
+    const all = this.expenses.map((e) => e.category);
+    this.categories = Array.from(new Set(all)).filter(Boolean);
   }
 
   applyFilter(): void {
-    this.filteredExpenses = this.selectedCategory
-      ? this.allExpenses.filter((e) => e.category === this.selectedCategory)
-      : this.allExpenses;
-  }
-
-  deleteExpense(id: number): void {
-    this.expenseService.deleteExpense(id);
+    if (this.selectedCategory) {
+      this.filteredExpenses = this.expenses.filter(
+        (e) => e.category === this.selectedCategory
+      );
+    } else {
+      this.filteredExpenses = [...this.expenses];
+    }
   }
 
   editExpense(expense: Expense): void {
     this.expenseService.setEditingExpense(expense);
     this.toastService.show('Expense loaded for editing');
+    this.router.navigate(['/add']); // if routing is used
+  }
+
+  deleteExpense(id: number): void {
+    this.expenseService.deleteExpense(id);
+    this.toastService.show('Expense deleted');
+    this.applyFilter();
   }
 }

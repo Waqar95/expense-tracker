@@ -24,7 +24,7 @@ export class AddExpenseComponent implements OnInit {
   ngOnInit(): void {
     this.expenseService.editingExpense$.subscribe((expense) => {
       if (expense) {
-        this.expense = { ...expense }; // make a copy
+        this.expense = { ...expense };
         this.isEditing = true;
       }
     });
@@ -53,5 +53,9 @@ export class AddExpenseComponent implements OnInit {
       category: '',
       date: new Date(),
     };
+  }
+
+  formatDateForInput(date: Date): string {
+    return date.toISOString().split('T')[0];
   }
 }

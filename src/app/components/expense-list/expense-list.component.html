@@ -12,15 +12,23 @@
   </select>
 </div>
 
-<ul style="list-style: none; padding: 0">
-  <li *ngFor="let expense of filteredExpenses">
-    <strong>{{ expense.title }}</strong> - {{ currency }}{{ expense.amount }} -
-    {{ expense.category }} -
-    {{ expense.date | date : "mediumDate" }}
-
-    <div class="actions">
+<ul
+  style="list-style: none; padding: 0"
+  *ngIf="filteredExpenses.length > 0; else noExpenses"
+>
+  <li *ngFor="let expense of filteredExpenses" class="expense-item">
+    <div>
+      <strong>{{ expense.title }}</strong> - {{ currency
+      }}{{ expense.amount }} - {{ expense.category }} -
+      {{ expense.date | date : "mediumDate" }}
+    </div>
+    <div class="actions" style="margin-top: 0.5rem">
       <button (click)="editExpense(expense)">Edit</button>
       <button (click)="deleteExpense(expense.id)">Delete</button>
     </div>
   </li>
 </ul>
+
+<ng-template #noExpenses>
+  <p>No expenses to show.</p>
+</ng-template>
