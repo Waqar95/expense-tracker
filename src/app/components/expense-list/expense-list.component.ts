@@ -61,8 +61,11 @@ export class ExpenseListComponent implements OnInit {
   }
 
   deleteExpense(id: number): void {
-    this.expenseService.deleteExpense(id);
-    this.toastService.show('Expense deleted');
-    this.applyFilter();
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this expense?'
+    );
+    if (confirmed) {
+      this.expenseService.deleteExpense(id);
+    }
   }
 }
