@@ -1,6 +1,27 @@
 # ExpenseTracker
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.15.
+A simple yet powerful Expense Tracker built with Angular (Standalone Components). Users can log daily expenses, choose categories, filter and edit entries, see summaries, and track spending over time — all with a clean, responsive UI.
+
+## 🚀 Features
+
+- Add, edit, delete expenses
+- Categorize expenses with default or custom categories
+- Filter by category
+- Currency selection (₹, $, €, etc.)
+- Toast notifications for actions
+- Delete confirmation popup
+- Summary of spending by category and total
+- Responsive design
+- Data stored in browser (localStorage)
+
+## 🛠 Tech Stack
+
+- Angular 17+
+- Standalone Components
+- RxJS `BehaviorSubject`
+- HTML/CSS
+- localStorage
+- No external UI libraries (fully customizable)
 
 ## Development server
 
