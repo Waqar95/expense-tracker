@@ -27,13 +27,30 @@
 
   <div class="form-group">
     <label for="category">Category</label>
-    <input
-      type="text"
+    <select
       id="category"
       name="category"
       [(ngModel)]="expense.category"
+      (change)="useCustomCategory = expense.category === 'Custom'"
       required
-      placeholder="e.g. Food, Travel"
+    >
+      <option value="" disabled selected>Select Category</option>
+      <option *ngFor="let cat of defaultCategories" [value]="cat">
+        {{ cat }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Show this input only if "Custom" is selected -->
+  <div class="form-group" *ngIf="useCustomCategory">
+    <label for="customCategory">Custom Category</label>
+    <input
+      type="text"
+      id="customCategory"
+      name="customCategory"
+      [(ngModel)]="expense.category"
+      required
+      placeholder="Enter your own category"
     />
   </div>
 

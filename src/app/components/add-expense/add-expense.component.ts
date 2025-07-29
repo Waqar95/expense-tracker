@@ -16,6 +16,22 @@ export class AddExpenseComponent implements OnInit {
   expense: Expense = this.getEmptyExpense();
   isEditing = false;
 
+  defaultCategories: string[] = [
+    'Groceries',
+    'Transport',
+    'Bills',
+    'Entertainment',
+    'Dining Out',
+    'Health',
+    'Education',
+    'Shopping',
+    'Travel',
+    'Others',
+    'Custom',
+  ];
+
+  useCustomCategory = false;
+
   constructor(
     private expenseService: ExpenseService,
     private toastService: ToastService

@@ -66,6 +66,7 @@ export class ExpenseListComponent implements OnInit {
     );
     if (confirmed) {
       this.expenseService.deleteExpense(id);
+      this.toastService.show('Expense deleted!');
     }
   }
 }
